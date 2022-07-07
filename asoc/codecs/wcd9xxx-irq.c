@@ -178,7 +178,7 @@ bool wcd9xxx_lock_sleep(
 	 */
 	mutex_lock(&wcd9xxx_res->pm_lock);
 	if (wcd9xxx_res->wlock_holders++ == 0) {
-		pr_debug("%s: holding wake lock\n", __func__);
+		pr_err("%s: holding wake lock\n", __func__);
 		pm_qos_update_request(&wcd9xxx_res->pm_qos_req,
 				      msm_cpuidle_get_deep_idle_latency());
 		pm_stay_awake(wcd9xxx_res->dev);
@@ -210,7 +210,7 @@ void wcd9xxx_unlock_sleep(
 {
 	mutex_lock(&wcd9xxx_res->pm_lock);
 	if (--wcd9xxx_res->wlock_holders == 0) {
-		pr_debug("%s: releasing wake lock pm_state %d -> %d\n",
+		pr_err("%s: releasing wake lock pm_state %d -> %d\n",
 			 __func__, wcd9xxx_res->pm_state, WCD9XXX_PM_SLEEPABLE);
 		/*
 		 * if wcd9xxx_lock_sleep failed, pm_state would be still

@@ -1057,7 +1057,7 @@ int wcd9xxx_core_res_suspend(
 	 */
 	mutex_lock(&wcd9xxx_core_res->pm_lock);
 	if (wcd9xxx_core_res->pm_state == WCD9XXX_PM_SLEEPABLE) {
-		pr_debug("%s: suspending system, state %d, wlock %d\n",
+		pr_err("%s: suspending system, state %d, wlock %d\n",
 			 __func__, wcd9xxx_core_res->pm_state,
 			 wcd9xxx_core_res->wlock_holders);
 		wcd9xxx_core_res->pm_state = WCD9XXX_PM_ASLEEP;
@@ -1066,7 +1066,7 @@ int wcd9xxx_core_res_suspend(
 		 * unlock to wait for pm_state == WCD9XXX_PM_SLEEPABLE
 		 * then set to WCD9XXX_PM_ASLEEP
 		 */
-		pr_debug("%s: waiting to suspend system, state %d, wlock %d\n",
+		pr_err("%s: waiting to suspend system, state %d, wlock %d\n",
 			 __func__, wcd9xxx_core_res->pm_state,
 			 wcd9xxx_core_res->wlock_holders);
 		mutex_unlock(&wcd9xxx_core_res->pm_lock);
@@ -1076,12 +1076,12 @@ int wcd9xxx_core_res_suspend(
 						  WCD9XXX_PM_ASLEEP) ==
 							WCD9XXX_PM_SLEEPABLE,
 					 HZ))) {
-			pr_debug("%s: suspend failed state %d, wlock %d\n",
+			pr_err("%s: suspend failed state %d, wlock %d\n",
 				 __func__, wcd9xxx_core_res->pm_state,
 				 wcd9xxx_core_res->wlock_holders);
 			ret = -EBUSY;
 		} else {
-			pr_debug("%s: done, state %d, wlock %d\n", __func__,
+			pr_err("%s: done, state %d, wlock %d\n", __func__,
 				 wcd9xxx_core_res->pm_state,
 				 wcd9xxx_core_res->wlock_holders);
 		}
@@ -1113,12 +1113,12 @@ int wcd9xxx_core_res_resume(
 	pr_debug("%s: enter\n", __func__);
 	mutex_lock(&wcd9xxx_core_res->pm_lock);
 	if (wcd9xxx_core_res->pm_state == WCD9XXX_PM_ASLEEP) {
-		pr_debug("%s: resuming system, state %d, wlock %d\n", __func__,
+		pr_err("%s: resuming system, state %d, wlock %d\n", __func__,
 				wcd9xxx_core_res->pm_state,
 				wcd9xxx_core_res->wlock_holders);
 		wcd9xxx_core_res->pm_state = WCD9XXX_PM_SLEEPABLE;
 	} else {
-		pr_warn("%s: system is already awake, state %d wlock %d\n",
+		pr_err("%s: system is already awake, state %d wlock %d\n",
 				__func__, wcd9xxx_core_res->pm_state,
 				wcd9xxx_core_res->wlock_holders);
 	}
