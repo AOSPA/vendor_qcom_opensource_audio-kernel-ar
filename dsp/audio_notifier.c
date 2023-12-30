@@ -322,7 +322,7 @@ static int audio_notifier_reg_client(struct client_data *client_data)
 	for (; service >= 0; service--) {
 		/* If a service is not initialized, wait for it to come up. */
 		if (service_data[service][domain].state == UNINIT_SERVICE) {
-			pr_err("%s: failed in client registration to PDR\n",
+			pr_err_ratelimited("%s: failed in client registration to PDR\n",
 				 __func__);
 			ret = -EINVAL;
 			goto done;
@@ -456,7 +456,7 @@ static int audio_notifier_service_cb(unsigned long opcode,
 	data.service = service;
 	data.domain = domain;
 
-	pr_debug("%s: service %s, opcode 0x%lx\n",
+	pr_info("%s: service %s, opcode 0x%lx\n",
 		__func__, service_data[service][domain].name, notifier_opcode);
 
 	mutex_lock(&notifier_mutex);
@@ -621,7 +621,7 @@ bool audio_notifier_probe_status(void)
 		goto exit;
 	}
 	if (priv->notifier_probe_complete) {
-		dev_info(&pdev->dev, "%s: audio notify probe successfully completed\n",
+		dev_dbg(&pdev->dev, "%s: audio notify probe successfully completed\n",
 			__func__);
 		return true;
 	}
@@ -669,7 +669,6 @@ static int audio_notify_probe(struct platform_device *pdev)
 	audio_notifier_late_init();
 
 	priv->notifier_probe_complete = true;
-	
 	return 0;
 }
 

@@ -669,6 +669,12 @@ static int lpi_pinctrl_probe(struct platform_device *pdev)
 		return -EPROBE_DEFER;
 	}
 
+	if (!audio_notifier_probe_status()) {
+		pr_err("%s: Audio notify probe not completed, defer lpi pinctrl probe\n",
+					__func__);
+		return -EPROBE_DEFER;
+	}
+
 	ret = of_property_read_u32(dev->of_node, "reg", &reg);
 	if (ret < 0) {
 		dev_err(dev, "missing base address\n");
